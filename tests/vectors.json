@@ -1,0 +1,49 @@
+{
+  "note": "Committed wire-format test vectors. Ed25519 is deterministic (RFC 8032), so each signature is a constant. Any implementation that disagrees with these bytes is wrong. See docs/WIRE-FORMAT.md.",
+  "seed_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+  "public_key_b64": "A6EHv/POEL4dcN0Y50vAmWfk1jCbpQ1fHdyGZBJVMbg=",
+  "timestamp": "1756200000000",
+  "nonce": "00000000-0000-4000-8000-000000000000",
+  "vectors": [
+    {
+      "name": "me",
+      "method": "GET",
+      "sent_path": "/v1/me",
+      "canonical_path": "/v1/me",
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "canonical": "GET\n/v1/me\n1756200000000\n00000000-0000-4000-8000-000000000000\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "signature": "pKiTw114s/oCBV1Ti8OuLTEuEISUYzd8MugUHVMm08Gu3eveMlxKY5PTxD9AZFbhIST66rVoDObRQXQBF4OdDg=="
+    },
+    {
+      "name": "json_body",
+      "method": "POST",
+      "sent_path": "/v1/actions",
+      "canonical_path": "/v1/actions",
+      "body": "{\"kind\":\"retrieval\"}",
+      "body_sha256": "302a3c4d90780f112f91b0a8d501169a03e569cf630193845618d2c56694f70f",
+      "canonical": "POST\n/v1/actions\n1756200000000\n00000000-0000-4000-8000-000000000000\n302a3c4d90780f112f91b0a8d501169a03e569cf630193845618d2c56694f70f",
+      "signature": "Kt1lVID5KdsSPUq6s6zXSIADbVKm4CpdmzZAQUxJJxM+9pdiPfXny8W5k9bYZnlyJo5KyplhM7ECdcBj19M4BA=="
+    },
+    {
+      "name": "query_string",
+      "method": "GET",
+      "sent_path": "/v1/jobs?state=open",
+      "canonical_path": "/v1/jobs",
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "canonical": "GET\n/v1/jobs\n1756200000000\n00000000-0000-4000-8000-000000000000\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "signature": "ZiUU1GRhb4NbkpUNEDJSxsViHUlcIXYY1nKKNU+b0onkVVLp20jakuKasVE/aHshRC6SNG3/Yg6j1Rzb3ocQAg=="
+    },
+    {
+      "name": "encoded_path",
+      "method": "GET",
+      "sent_path": "/v1/agents/a%20b%2Fc/reputation",
+      "canonical_path": "/v1/agents/a%20b%2Fc/reputation",
+      "body": "",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "canonical": "GET\n/v1/agents/a%20b%2Fc/reputation\n1756200000000\n00000000-0000-4000-8000-000000000000\ne3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "signature": "RHiGJDnaT7WH06iU8a20+Gql/kv6XkbMRLvjK5vnnvZTTw1a0AmaGdEXES9EHOtCdEGAGS4gUI0+ELkGr2muBQ=="
+    }
+  ]
+}
