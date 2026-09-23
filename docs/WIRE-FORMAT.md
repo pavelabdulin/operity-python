@@ -47,17 +47,63 @@ SHA256(BODY) as lowercase hex
 
 ### Committed test vectors
 
-Seed `bytes(range(32))` (public key `A6EHv/POEL4dcN0Y50vAmWfk1jCbpQ1fHdyGZBJVMbg=`),
-timestamp `1756200000000`, nonce `00000000-0000-4000-8000-000000000000`:
+Seed `bytes(range(32))`, so the public key is
+`A6EHv/POEL4dcN0Y50vAmWfk1jCbpQ1fHdyGZBJVMbg=`. Timestamp `1756200000000`
+and nonce `00000000-0000-4000-8000-000000000000` in all four.
 
-| request | signature |
-|---|---|
-| `GET /v1/me`, empty body | `pKiTw114s/oCBV1Ti8OuLTEuEISUYzd8MugUHVMm08Gu3eveMlxKY5PTxD9AZFbhIST66rVoDObRQXQBF4OdDg==` |
-| `POST /v1/actions`, body `{"kind":"retrieval"}` | `Kt1lVID5KdsSPUq6s6zXSIADbVKm4CpdmzZAQUxJJxM+9pdiPfXny8W5k9bYZnlyJo5KyplhM7ECdcBj19M4BA==` |
-| `GET /v1/jobs?state=open` (signed path `/v1/jobs`) | `ZiUU1GRhb4NbkpUNEDJSxsViHUlcIXYY1nKKNU+b0onkVVLp20jakuKasVE/aHshRC6SNG3/Yg6j1Rzb3ocQAg==` |
-| `GET /v1/agents/a%20b%2Fc/reputation` (signed raw) | `RHiGJDnaT7WH06iU8a20+Gql/kv6XkbMRLvjK5vnnvZTTw1a0AmaGdEXES9EHOtCdEGAGS4gUI0+ELkGr2muBQ==` |
+Every value below is given whole, and none of them is abbreviated. Build the
+canonical string from `method`, `signed path`, the timestamp, the nonce and
+`body sha256` as described above, sign it, and compare with `signature`.
+
+A request with no body:
+
+```text
+method       GET
+sent path    /v1/me
+signed path  /v1/me
+body         (empty)
+body sha256  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+signature    pKiTw114s/oCBV1Ti8OuLTEuEISUYzd8MugUHVMm08Gu3eveMlxKY5PTxD9AZFbhIST66rVoDObRQXQBF4OdDg==
+```
+
+A JSON body, hashed as the exact bytes on the wire. Serialise once: the
+compact form below is what is signed, and `{"kind": "retrieval"}`, with a
+space, is a different request.
+
+```text
+method       POST
+sent path    /v1/actions
+signed path  /v1/actions
+body         {"kind":"retrieval"}
+body sha256  302a3c4d90780f112f91b0a8d501169a03e569cf630193845618d2c56694f70f
+signature    Kt1lVID5KdsSPUq6s6zXSIADbVKm4CpdmzZAQUxJJxM+9pdiPfXny8W5k9bYZnlyJo5KyplhM7ECdcBj19M4BA==
+```
+
+A query string, which is sent and NOT signed:
+
+```text
+method       GET
+sent path    /v1/jobs?state=open
+signed path  /v1/jobs
+body         (empty)
+body sha256  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+signature    ZiUU1GRhb4NbkpUNEDJSxsViHUlcIXYY1nKKNU+b0onkVVLp20jakuKasVE/aHshRC6SNG3/Yg6j1Rzb3ocQAg==
+```
+
+A percent-encoded path, which is signed raw and never decoded:
+
+```text
+method       GET
+sent path    /v1/agents/a%20b%2Fc/reputation
+signed path  /v1/agents/a%20b%2Fc/reputation
+body         (empty)
+body sha256  e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+signature    RHiGJDnaT7WH06iU8a20+Gql/kv6XkbMRLvjK5vnnvZTTw1a0AmaGdEXES9EHOtCdEGAGS4gUI0+ELkGr2muBQ==
+```
 
 The server and the Python client are both tested against these exact bytes.
+The same four are published as machine-readable data beside the client, at
+https://github.com/pavelabdulin/operity-python/blob/main/tests/vectors.json.
 
 ## Money-moving requests are idempotent
 
